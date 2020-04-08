@@ -1,0 +1,17 @@
+{
+	"projects": [
+		{ "key": "core","shallow": false, "url": "https://github.com/project-orva/orva" },
+		{ "key": "sdk","shallow": false, "url": "http://github.com/project-orva/sdk" },
+		{ "key": "skill","shallow": false, "url": "http://github.com/project-orva/skill-service" },
+		{ "key": "app","shallow": false, "url": "http://github.com/project-orva/core-webapp" },
+		{ "key": "speech","shallow": false, "url": "https://github.com/project-orva/speech-service"},
+		{ "key": "queries-service","shallow": false, "url": "https://github.com/project-orva/core-web"},
+		{ "key": "shallow", "shallow": true, "url": "https://github.com/project-orva/mono-shallow"}
+	],
+	"schema": [
+		"core",
+		"sdk",
+		{ "web": ["queries-service", "app"]},
+		{"services": ["skill", "speech"]}
+	]
+}
