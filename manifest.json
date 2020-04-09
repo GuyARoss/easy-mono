@@ -1,4 +1,5 @@
 {
+	"remote": "https://github.com/GuyARoss/orva-mirror",
 	"projects": [
 		{ "key": "core","shallow": false, "url": "https://github.com/project-orva/orva" },
 		{ "key": "sdk","shallow": false, "url": "http://github.com/project-orva/sdk" },
