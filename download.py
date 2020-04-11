@@ -5,18 +5,13 @@ Fetches, unzips & reorgs the repos.
 '''
 import os, json, requests, shutil, zipfile, glob, resource
 
-import git_binds
+import git
 
 # create structure
 def build_directories(schema, base_path, paths = {}):
     for f in schema:
         if type(f) is dict:
             for k in f:
-                # if not paths.has_key('_flat_default'):
-                #     paths['_flat_default'] = []
-
-                # paths['_flat_default'].append("{}/{}".format(base_path, k))
-
                 paths = build_directories(f[k], "{}/{}".format(base_path,k), paths)
         else:
             paths[f] = "{}/{}".format(base_path, f)
@@ -53,7 +48,7 @@ def create_repo(man, paths):
         archive_link = "{}/archive/master.zip".format(proj['url']) # @@ different branches
         
         b_path = "temp/{}".format(proj['key'])
-        download(archive_link, b_path)
+        download(archive_link, b_path) # @@ replace this for a git process, that returns the repos in an arr.
 
         # we reorg by unzippn
         with zipfile.ZipFile(b_path, 'r') as zip_ref:
@@ -79,19 +74,26 @@ def create_repo(man, paths):
 def main():
     man = load_manifest()
 
-    for f in os.listdir("temp2"):
-        print(".git" in f )
+    repo = git.Repo.clone_from(man['remote'], 'temp2')
+    cleanup_gitdir("temp2")
+
+    pths = build_directories(man['schema'], "temp2")
+    create_repo(man, pths) # build da mono repo.
+
+    repo.git.add('--all')
+    repo.index.commit("mono repo mirror commit") # @@? 
+    origin = repo.remote(name='origin')
+    origin.push()
+
+    # temp cleanup
+    for f in os.listdir("temp"):
         if ".git" not in f :
-            fp = "temp2/{}".format(f)
+            fp = "temp/{}".format(f)
             if os.path.isfile(fp):
                 os.remove(fp)
             else: 
                 shutil.rmtree(fp)
 
-    git_binds.git_addall("temp2")
-    git_binds.git_commit("easy mono")
-    git_binds.git_push("master") # @@ branches!
-   
     print(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000 / 1000) # meg
             
 def cleanup(temp_partition):
@@ -99,6 +101,14 @@ def cleanup(temp_partition):
         if os.path.exists(p):
             shutil.rmtree(p)
 
+def cleanup_gitdir(path):
+    for f in os.listdir(path):
+        if ".git" not in f :
+            fp = "{}/{}".format(path, f)
+            if os.path.isfile(fp):
+                os.remove(fp)
+            else: 
+                shutil.rmtree(fp)
 
 if __name__ == "__main__":
     temp_partition = ['temp', 'temp2']
