@@ -57,7 +57,7 @@ func main() {
 		ResourceLock:   false,
 	}
 
-	http.HandleFunc("/", settings.runScript)
+	http.HandleFunc("/runner", settings.runScript)
 	http.HandleFunc("/health", settings.health)
 
 	s := fmt.Sprintf(":%v", *port)
