@@ -29,7 +29,7 @@ E.g
 		{ "key": "project-1","shallow": false, "url": "http://project-1.remote.com" },
 		{ "key": "project-2","shallow": false, "url": "http://project-2.remote.com" },
 		{ "key": "project-2.5","shallow": false, "url": "http://project-2.5.remote.com" },
-		{ "key": "project-3","shallow": true, "url": "http://project-3.remote.com" },`
+		{ "key": "project-3","shallow": true, "url": "http://project-3.remote.com" },
 	],
 	"schema": [
 		"project-1",
